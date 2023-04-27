@@ -17,27 +17,28 @@ def get_smallest_area(dimensions)
     return smallest_area
 end
 
-def calculate_ribbon(dimensions)
+def calculate_ribbon_length(dimensions)
     l, w, h = dimensions
 
-    smallest_dimensions = []
+    feet_of_ribbon = 0
 
     if l < h && w < h
-        smallest_dimensions.append(l).append(w)
+        feet_of_ribbon = l + l + w + w
     elsif l < w && h < w
-        smallest_dimensions.append(l).append(h)
+        feet_of_ribbon = l + l + h + h
     else
-        smallest_dimensions.append(w).append(h)
+        feet_of_ribbon = w + w + h + h
     end
 
-    feet_of_ribbon = smallest_dimensions[0] * 2 + smallest_dimensions[1] * 2
     feet_of_bow = l * w * h
 
     return feet_of_ribbon + feet_of_bow
 end
 
+
+# Part One
+
 total_wrapping_paper = 0
-total_ribbon = 0
 
 File.open("2015/data/02.data") do |f|
     f.each_line do |line|
@@ -45,9 +46,21 @@ File.open("2015/data/02.data") do |f|
         surface_area = (2 * l * w) + (2 * w * h) + (2 * h * l)
         smallest_area = get_smallest_area([l, w, h])
         total_wrapping_paper += surface_area + smallest_area
-        total_ribbon += calculate_ribbon([l, w, h])
     end
 end
 
 puts total_wrapping_paper
+
+
+# Part Two
+
+total_ribbon = 0
+
+File.open("2015/data/02.data") do |f|
+    f.each_line do |line|
+        l, w, h = line.split("x").map { |i| Integer(i) }
+        total_ribbon += calculate_ribbon_length([l, w, h])
+    end
+end
+
 puts total_ribbon
